@@ -30,13 +30,14 @@ func New(directory string) (version.Getter, error) {
 }
 
 // ~r4.8-40-g56a99c2~
+//Doc: https://git-scm.com/docs/git-describe
 func (g *Git) tag() (tag string, err error) {
 	tag, exists := os.LookupEnv("LAST_TAG")
 	if exists {
 		return
 	}
 
-	s, err := g.run("describe", "--tags")
+	s, err := g.run("describe", "--tags", "--long")
 	if err != nil {
 		return
 	}
@@ -74,7 +75,7 @@ func (g *Git) isTagged() bool {
 		return b
 	}
 
-	_, err := g.run("describe", "--exact-match", "--tags")
+	_, err := g.run("describe", "--exact-match", "--long", "--tags")
 	return err == nil
 }
 
@@ -93,7 +94,7 @@ func (g *Git) commits() (commits int, err error) {
 		return
 	}
 
-	s, err := g.run("describe", "--tags")
+	s, err := g.run("describe", "--tags", "--long")
 	if err != nil {
 		s, err = g.run("rev-list", "--count", "HEAD")
 		if err != nil {
@@ -196,7 +197,7 @@ func (g *Git) versionFromHistory(ver *semver.Version) (*semver.Version, error) {
 		}
 		version = version.IncPatch()
 		if branch != "master" {
-			prerel = "0." + branch
+			prerel = "0." + branch + "-" + strconv.Itoa(commits)
 		}
 	}
 
