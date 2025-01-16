@@ -30,7 +30,7 @@ func New(directory string) (version.Getter, error) {
 }
 
 // ~r4.8-40-g56a99c2~
-//Doc: https://git-scm.com/docs/git-describe
+// Doc: https://git-scm.com/docs/git-describe
 func (g *Git) tag() (tag string, err error) {
 	tag, exists := os.LookupEnv("LAST_TAG")
 	if exists {
