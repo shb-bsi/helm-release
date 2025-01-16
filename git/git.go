@@ -197,7 +197,7 @@ func (g *Git) versionFromHistory(ver *semver.Version) (*semver.Version, error) {
 		}
 		version = version.IncPatch()
 		if branch != "master" {
-			prerel = "0." + branch + "-" + strconv.Itoa(commits)
+			prerel = "0." + branch
 		}
 	}
 
